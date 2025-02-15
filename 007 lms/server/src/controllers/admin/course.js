@@ -29,7 +29,20 @@ const readCourses = async (req, res) => {
     }
 }
 
+const activeCourses = async (req, res) => {
+    try {
+        const courses = await Course.find({status: true});
+        const filepath = `${req.protocol}://${req.get('host')}/files/`
+        res.status(200).json({ message: 'success', data: courses, filepath });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error", error: error.message })
+    }
+}
+
 module.exports = {
     createCourse,
-    readCourses
+    readCourses,
+    activeCourses
 }
