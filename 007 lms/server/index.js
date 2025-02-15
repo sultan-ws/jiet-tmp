@@ -8,6 +8,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use('/files', express.static('./public/uploads'));
 app.use('/api', masterRouter);
 
 app.listen(4000, ()=>{

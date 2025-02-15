@@ -6,9 +6,12 @@ import Footer from '../Common/Footer'
 import { mainContext } from '../Context'
 import prev from '../img/generic-image-file-icon-hi.png'
 import axios from 'axios'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router'
 // import AdminForms from '../Common/AdminForms'
 
 function Addcourse() {
+  const nav = useNavigate();
   let { changemenu } = useContext(mainContext);
   const [preview, setPreview] = useState(null);
 
@@ -18,6 +21,26 @@ function Addcourse() {
     axios.post('http://localhost:4000/api/admin/course/create-course', e.target)
       .then((response) => {
         console.log(response.data);
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+          },
+          buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+          title: "Course Added !",
+          text: "Want to be redirected to view page?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, redirect me!",
+          cancelButtonText: "No, cancel!",
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            nav('/viewcourse')
+          } 
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -48,7 +71,7 @@ function Addcourse() {
                 <input name='duration' type="text" className='border px-4 border-gray-400 w-full h-[50px] mb-3 mt-2 ' />
                 Courses Description
                 <textarea name="description" id="" className='border px-4 pt-3 border-gray-400 my-2 w-full h-[100px]' cols="30" rows="10"></textarea>
-                <input onChange={(e)=>setPreview(URL.createObjectURL(e.target.files[0]))} name='thumbnail' type="file" id='file-input' className='border hidden border-gray-400 w-full h-[50px] mb-3 mt-2 ' />
+                <input onChange={(e) => setPreview(URL.createObjectURL(e.target.files[0]))} name='thumbnail' type="file" id='file-input' className='border hidden border-gray-400 w-full h-[50px] mb-3 mt-2 ' />
                 <div className='flex items-center gap-0 mt-[80px]'>
                   <div className='w-full flex items-center'>
                     <input type="text" readOnly placeholder='Upload File' className=' px-4 rounded-[10px_0px_0px_10px] border border-gray-400 w-[70%] h-[50px]' />
