@@ -1,6 +1,8 @@
 export const createCourse = async (req, res) => {
     try{
-        console.log(req.files, req.body);
+        const data = req.files;
+
+        if(req.files && req.files.thumbnail) data.thumbnail = req.files.thumbnail[0].filename
         res.status(200).json({message: 'success'});
     }
     catch(error){
